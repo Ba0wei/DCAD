@@ -47,17 +47,45 @@ def trace_noising_intervals(config: TNDCADConfig) -> dict[CostLevel, list[tuple[
 
 
 def sample_trace_time(level: CostLevel, config: TNDCADConfig, rng: random.Random) -> float:
+    """Sample one interval for callers that need a single stochastic view."""
     intervals = trace_noising_intervals(config)[level]
     start, end = rng.choice(intervals)
     return start + rng.random() * (end - start)
 
 
+def sample_trace_views(
+    level: CostLevel, config: TNDCADConfig, rng: random.Random
+) -> list[float]:
+    """Sample every cost-conditioned interval to construct all training views."""
+    return [rng.uniform(start, end) for start, end in trace_noising_intervals(config)[level]]
+
+
 def trace_contribution_weights(levels: Sequence[CostLevel], beta: float) -> list[float]:
-    """Smooth unequal numbers of noising views contributed by each trace group."""
+    """Return the per-view weight v**(beta - 1) for each source trace."""
+    if beta < 0.0:
+        raise ValueError("beta must be non-negative.")
     views = {"low": 1, "medium": 2, "high": 3}
-    raw = [views[level] ** (-beta) for level in levels]
-    mean = sum(raw) / max(len(raw), 1)
-    return [weight / mean for weight in raw]
+    return [views[level] ** (beta - 1.0) for level in levels]
+
+
+def expand_trace_views(
+    levels: Sequence[CostLevel], config: TNDCADConfig, rng: random.Random
+) -> tuple[list[int], list[float], list[float]]:
+    """Expand traces into all views and return source indices, times, and weights."""
+    source_indices: list[int] = []
+    mask_ratios: list[float] = []
+    trace_weights: list[float] = []
+    per_trace_weights = trace_contribution_weights(levels, config.trace_weight_beta)
+
+    for source_index, (level, per_view_weight) in enumerate(
+        zip(levels, per_trace_weights)
+    ):
+        times = sample_trace_views(level, config, rng)
+        source_indices.extend([source_index] * len(times))
+        mask_ratios.extend(times)
+        trace_weights.extend([per_view_weight] * len(times))
+
+    return source_indices, mask_ratios, trace_weights
 
 
 def tn_dcad_reconstruction_loss(
@@ -66,13 +94,17 @@ def tn_dcad_reconstruction_loss(
     mask_ratios: torch.Tensor,
     trace_weights: torch.Tensor,
 ) -> torch.Tensor:
-    """Apply diffusion and trace-contribution weights to masked-token loss."""
+    """Match the experiment loss over trace-weighted masked tokens."""
     token_loss = F.cross_entropy(
         logits.transpose(1, 2), labels, ignore_index=IGNORE_INDEX, reduction="none"
     )
     valid = labels.ne(IGNORE_INDEX)
-    per_trace = (token_loss * valid).sum(1) / valid.sum(1).clamp_min(1)
-    return (per_trace * mdlm_loss_weight(mask_ratios) * trace_weights).mean()
+    valid_float = valid.to(token_loss.dtype)
+    diffusion_weights = mdlm_loss_weight(mask_ratios).unsqueeze(1)
+    trace_weights = trace_weights.to(token_loss.dtype).unsqueeze(1)
+    numerator = (token_loss * valid_float * diffusion_weights * trace_weights).sum()
+    denominator = (valid_float * trace_weights).sum().clamp_min(1.0)
+    return numerator / denominator
 
 
 def train_tn_dcad_batch(
