@@ -1,0 +1,55 @@
+{
+  "derivation": "int.from_bytes(sha256(f'{algorithm_version}|{dataset}|{base_seed}|{repeat}'.encode()).digest()[:4], 'big')",
+  "repeat_index_starts_at": 1,
+  "seeds": [
+    {
+      "dataset": "BPIC12",
+      "base_seed": 42,
+      "repeat": 1,
+      "seed": 307694762,
+      "algorithm_version": "trace_order_v1"
+    },
+    {
+      "dataset": "BPIC15_1",
+      "base_seed": 42,
+      "repeat": 1,
+      "seed": 1649758743,
+      "algorithm_version": "trace_order_v1"
+    },
+    {
+      "dataset": "BPIC15_2",
+      "base_seed": 42,
+      "repeat": 1,
+      "seed": 3572032885,
+      "algorithm_version": "trace_order_v1"
+    },
+    {
+      "dataset": "BPIC15_3",
+      "base_seed": 42,
+      "repeat": 1,
+      "seed": 1317870673,
+      "algorithm_version": "trace_order_v1"
+    },
+    {
+      "dataset": "BPIC15_4",
+      "base_seed": 42,
+      "repeat": 1,
+      "seed": 1466331127,
+      "algorithm_version": "trace_order_v1"
+    },
+    {
+      "dataset": "BPIC15_5",
+      "base_seed": 42,
+      "repeat": 1,
+      "seed": 3437344897,
+      "algorithm_version": "trace_order_v1"
+    },
+    {
+      "dataset": "BPIC17",
+      "base_seed": 42,
+      "repeat": 1,
+      "seed": 380423602,
+      "algorithm_version": "trace_order_v1"
+    }
+  ]
+}

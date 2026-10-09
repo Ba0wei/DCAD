@@ -4,3 +4,9 @@ data/**/*.csv filter=lfs diff=lfs merge=lfs -text
 data/**/*.json.gz filter=lfs diff=lfs merge=lfs -text
 *.pnml filter=lfs diff=lfs merge=lfs -text
 *.plg filter=lfs diff=lfs merge=lfs -text
+# Variant-ratio source manifests are large provenance artifacts.
+data/variant_ratio/**/split_manifest.json filter=lfs diff=lfs merge=lfs -text
+data/variant_ratio/**/pool_manifest.json filter=lfs diff=lfs merge=lfs -text
+data/variant_ratio/**/test_manifest.json filter=lfs diff=lfs merge=lfs -text
+# Keep the small summaries reviewable in ordinary Git.
+data/variant_ratio/**/summary.csv !filter !diff !merge -text whitespace=cr-at-eol
