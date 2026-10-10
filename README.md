@@ -32,7 +32,7 @@ The repository includes routines for XES/CSV conversion, trace-variant splitting
 
 The main-experiment dataset files can be checked with `python scripts/validate_data.py`.
 
-The [variant-ratio experiments](docs/DATA.md#variant-ratio-experiments) include 35 normal splits and labeled mixed test sets for seven BPIC logs at five observed/unseen variant ratios (base seed 42, repeat 1), together with fixed anomaly pools and standalone data construction tools. Validate them with `python scripts/validate_variant_ratio.py`.
+The [variant-ratio experiments](docs/DATA.md#data-layout) include 35 normal splits and labeled mixed test sets for seven BPIC logs at five observed/unseen variant ratios (base seed 42, repeat 1), together with fixed anomaly pools and standalone data construction tools. Validate them with `python scripts/validate_variant_ratio.py`.
 
 ## License
 
