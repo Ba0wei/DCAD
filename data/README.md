@@ -25,6 +25,6 @@ python scripts/validate_data.py
 python scripts/validate_variant_ratio.py
 ```
 
-Alignment-cost files are not versioned. The TN-DCAD core expects the columns `case_id` and normalized `alignment_cost`; selected computation logic is provided, while the complete generation pipeline is outside this release.
+Alignment-cost files are generated at runtime. The variant-ratio runners build the reference model and alignment costs for each split automatically. For main-experiment data, use `scripts/Inductive_Miner_Infrequent.py` and `scripts/compute_train_alignment_costs.py`; the trainer reads `case_id` and normalized `alignment_cost`. See the [experiment commands](../README.md#individual-training-and-tn-alignment).
 
 The BPI Challenge logs remain subject to the terms and citation requirements of their original providers. Inclusion here does not relicense those datasets.

@@ -9,9 +9,6 @@ description = "DCAD-family anomaly detection for event logs"
 requires-python = ">=3.10"
 dependencies = ["numpy>=1.24", "pandas>=2.0", "torch>=2.1", "pm4py>=2.7", "lxml>=4.9", "networkx>=3.0", "untangle>=1.2", "matplotlib>=3.7", "tqdm>=4.65"]
 
-[project.optional-dependencies]
-test = ["pytest>=7.4"]
-
 [tool.setuptools.packages.find]
 where = ["."]
 include = ["dcad", "dcad.*"]

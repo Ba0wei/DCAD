@@ -185,7 +185,11 @@ def run_log(log_name: str) -> None:
 
 
 def main() -> None:
-    for log_name in LOG_NAMES:
+    import argparse
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--datasets', nargs='+', default=LOG_NAMES)
+    args = parser.parse_args()
+    for log_name in args.datasets:
         run_log(log_name)
 
 

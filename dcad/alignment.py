@@ -1,8 +1,4 @@
-"""Core alignment-cost computation used by TN-DCAD.
-
-Dataset selection, path resolution, persistence, and command-line orchestration
-are intentionally outside this public core module.
-"""
+"""Normalized TN-DCAD costs; CLI orchestration is in scripts/compute_train_alignment_costs.py."""
 
 from __future__ import annotations
 
