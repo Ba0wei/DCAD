@@ -20,7 +20,7 @@ from dataclasses import dataclass
 from itertools import chain
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[3]
+ROOT = Path(__file__).resolve().parents[2]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
@@ -38,11 +38,11 @@ VERSION = "anomaly_pool_v1"
 BOUNDARIES = split.BOUNDARY_MARKERS
 TYPES = ("SkipSequence", "Rework", "Early", "Late", "Insert")
 IMPLEMENTATIONS = (
-    "src/dcad/variant_ratio/pool.py", "src/dcad/variant_ratio/split.py",
-    "src/dcad/variant_ratio/injection.py", "src/dcad/variant_ratio/io.py",
-    "src/dcad/variant_split.py", "src/dcad/generation/anomaly.py",
-    "src/dcad/generation/attribute_generator.py", "src/dcad/processmining/case.py",
-    "src/dcad/processmining/event.py", "src/dcad/processmining/log.py", "src/dcad/anomaly.py",
+    "dcad/variant_ratio/pool.py", "dcad/variant_ratio/split.py",
+    "dcad/variant_ratio/injection.py", "dcad/variant_ratio/io.py",
+    "dcad/variant_split.py", "dcad/generation/anomaly.py",
+    "dcad/generation/attribute_generator.py", "dcad/processmining/case.py",
+    "dcad/processmining/event.py", "dcad/processmining/log.py", "dcad/anomaly.py",
 )
 SUMMARY_FIELDS = (
     "dataset", "repeat", "split_seed", "observed_ratio", "normal_traces", "anomalous_traces",

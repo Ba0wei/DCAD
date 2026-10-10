@@ -15,7 +15,7 @@ from decimal import Decimal
 from pathlib import Path
 
 
-ROOT = Path(__file__).resolve().parents[3]
+ROOT = Path(__file__).resolve().parents[2]
 DATASETS = ("BPIC12", *(f"BPIC15_{i}" for i in range(1, 6)), "BPIC17")
 RATIOS = (0.9, 0.8, 0.6, 0.4, 0.2)
 ALGORITHM_VERSION = "trace_order_v1"
@@ -276,7 +276,7 @@ def audit_validation(train_path: Path, test_path: Path, train: list[Case], test:
                        "max_len": config.max_len, "activity_col": "name", "case_id_col": "case_id"},
         "implementation_sha256": {
             name: file_sha256(ROOT / name)
-            for name in ("src/dcad/variant_ratio/io.py", "src/dcad/variant_split.py")
+            for name in ("dcad/variant_ratio/io.py", "dcad/variant_split.py")
         },
         "coverage_basis": "actual post-preprocessing gradient sequences, including boundary tokens; full normal test",
         "gradient_train": gradient, "validation": validation,

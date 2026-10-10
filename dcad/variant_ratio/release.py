@@ -105,7 +105,7 @@ def validate_release(root: Path, raw: Path, xes: Path) -> dict:
     return {'schema_version': 1, 'base_seed': 42, 'repeat': 1,
             'release_index_sha256': split.file_sha256(root / 'release_index.json'),
             'implementation_sha256': {**pool.implementation_hashes(),
-                                      'src/dcad/variant_ratio/release.py': split.file_sha256(Path(__file__))},
+                                      'dcad/variant_ratio/release.py': split.file_sha256(Path(__file__))},
             'checks': ['file inventory and hashes', 'source rows and variant membership',
                        'discovery reproducibility and nested observed sets',
                        'historical versus current validation membership and activity coverage',

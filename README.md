@@ -24,7 +24,7 @@ pip install -e '.[test]'
 
 The training components include deterministic seed control and reproducibility settings. See [the data guide](data/README.md) for the dataset layout.
 
-The main implementations are organized in `src/dcad/model.py`, `dcad.py`, `em_dcad.py`, `tn_dcad.py`, and `scoring.py`.
+The main implementations are organized in `dcad/model.py`, `dcad.py`, `em_dcad.py`, `tn_dcad.py`, and `scoring.py`.
 
 ## Data preparation
 

@@ -19,7 +19,7 @@ from pathlib import Path
 
 
 # Base
-ROOT_DIR = Path(__file__).resolve().parents[2]
+ROOT_DIR = Path(__file__).resolve().parents[1]
 
 # Output
 EVENTLOG_DIR = ROOT_DIR / 'data' / 'processed' / 'custom_test'
