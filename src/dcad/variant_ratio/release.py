@@ -36,7 +36,7 @@ def validate_index(root: Path) -> dict:
         require(target.is_file() and target.stat().st_size == entry['bytes'], f'Missing/changed file: {target}')
         require(split.file_sha256(target) == entry['sha256'], f'Hash mismatch: {target}')
     actual = {str(p.relative_to(root)) for p in root.rglob('*') if p.is_file()
-              and p not in {root / 'release_index.json', root / 'audit_report.json'}}
+              and p != root / 'release_index.json'}
     require(paths == actual, 'Index does not cover the release files exactly')
     require({(r['dataset'], r['ratio']) for r in index['splits']} ==
             {(d, r) for d in split.DATASETS for r in split.RATIOS}
@@ -134,15 +134,12 @@ def main(argv=None):
     parser.add_argument('--data-dir', type=Path, default=split.ROOT / 'data/variant_ratio')
     parser.add_argument('--raw-dir', type=Path, default=split.ROOT / 'data/processed/raw')
     parser.add_argument('--xes-dir', type=Path, default=split.ROOT / 'data/original/real')
-    parser.add_argument('--report', type=Path, help='Write a new audit report; otherwise validation is read-only.')
     parser.add_argument('--compare-rebuilt', type=Path, help='Compare rebuilt data bytes against this release.')
     args = parser.parse_args(argv)
     if args.compare_rebuilt:
         compare_rebuilt(args.compare_rebuilt.resolve(), args.data_dir.resolve())
         return
-    report = validate_release(args.data_dir.resolve(), args.raw_dir.resolve(), args.xes_dir.resolve())
-    if args.report:
-        split.atomic_json(args.report, report)
+    validate_release(args.data_dir.resolve(), args.raw_dir.resolve(), args.xes_dir.resolve())
     print('Validated 35 splits, 7 fixed anomaly pools and 35 mixed tests.', flush=True)
 
 

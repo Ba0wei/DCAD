@@ -30,7 +30,6 @@ The additional data occupy approximately **1.83 GiB** when downloaded.
 ```text
 data/variant_ratio/
 ├── release_index.json          # relative paths, sizes and SHA-256 for release files
-├── audit_report.json           # checks performed with the published implementation
 ├── pool_config.json            # fixed anomaly-pool capacities and base seed
 ├── splits/
 │   ├── summary.csv
@@ -125,8 +124,6 @@ After the installation described in the README, run from the repository root:
 
 ```bash
 python scripts/validate_variant_ratio.py
-# Optional: save a fresh audit outside the release directory.
-python scripts/validate_variant_ratio.py --report /tmp/variant_ratio_audit.json
 # Only recheck normal splits and validation activity coverage:
 python scripts/split_by_variant_ratio.py --audit-only
 ```
@@ -159,7 +156,7 @@ the same settings and `--overwrite`. It rebuilds the pool and its mixed tests to
 Existing source manifests are preserved byte-for-byte, including historical
 absolute paths and source-code hashes. They document the original experiment;
 those paths are not runtime dependencies. `release_index.json` supplies portable
-locations, and `audit_report.json` identifies the current validation implementation.
+locations, while `validate_variant_ratio.py` checks them with the current implementation.
 Rebuilt manifests correctly record new paths and implementation hashes, while
 `--compare-rebuilt` compares the actual CSV and JSON.GZ data bytes. It does not
 require historical and newly generated manifests to be identical.
