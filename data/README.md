@@ -16,7 +16,7 @@ The project includes twelve logs: `wide`, `medium`, `large`, `huge`, `gigantic`,
 
 The variant-ratio data cover BPIC12, BPIC15_1–5 and BPIC17 at observed/unseen ratios 20/80, 40/60, 60/40, 80/20 and 90/10: 35 splits using base seed 42, repeat 1. Ratios refer to normal variants, not case counts. These data reuse the original BPIC inputs above; split directories follow `<dataset>/seed_<derived>/observed_<percentage>/`.
 
-Download the data with Git LFS as described in the README. Construction tools are provided for [normal variant splits](../scripts/split_by_variant_ratio.py) and [fixed anomaly pools and mixed test sets](../scripts/build_variant_ratio_testsets.py); use `--output-dir` to generate data in a separate directory.
+Download the data with Git LFS as described in the [project README](../README.md). Construction tools are provided for [normal variant splits](../scripts/split_by_variant_ratio.py) and [fixed anomaly pools and mixed test sets](../scripts/build_variant_ratio_testsets.py); use `--output-dir` to generate data in a separate directory.
 
 Validate the released data from the repository root:
 
