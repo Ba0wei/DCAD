@@ -14,7 +14,7 @@ The project includes twelve logs: `wide`, `medium`, `large`, `huge`, `gigantic`,
 - `data/variant_ratio/pool_config.json`: fixed pool capacities required to reconstruct the released test sets.
 - `data/variant_ratio/release_index.json`: relative file paths, sizes and SHA-256 hashes used to verify the release and compare rebuilt data.
 
-The variant-ratio data cover BPIC12, BPIC15_1–5 and BPIC17 at observed/unseen ratios 20/80, 40/60, 60/40, 80/20 and 90/10: 35 splits using base seed 42, repeat 1. Ratios refer to normal variants, not case counts. These data reuse the original BPIC inputs above; split directories follow `<dataset>/seed_<derived>/observed_<percentage>/`.
+The variant-ratio data cover BPIC12, BPIC15_1–5 and BPIC17 at observed/unseen ratios 20/80, 40/60, 60/40, 80/20 and 90/10: 35 splits. Ratios refer to normal variants, not case counts. These data reuse the original BPIC inputs above; split directories follow `<dataset>/seed_<derived>/observed_<percentage>/`.
 
 Download the data with Git LFS as described in the [project README](../README.md). Construction tools are provided for [normal variant splits](../scripts/split_by_variant_ratio.py) and [fixed anomaly pools and mixed test sets](../scripts/build_variant_ratio_testsets.py); use `--output-dir` to generate data in a separate directory.
 
@@ -25,6 +25,6 @@ python scripts/validate_data.py
 python scripts/validate_variant_ratio.py
 ```
 
-Alignment-cost files are generated at runtime. The variant-ratio runners build the reference model and alignment costs for each split automatically. For main-experiment data, use `scripts/Inductive_Miner_Infrequent.py` and `scripts/compute_train_alignment_costs.py`; the trainer reads `case_id` and normalized `alignment_cost`. See the [experiment commands](../README.md#individual-training-and-tn-alignment).
+Alignment-cost files are generated at runtime. The variant-ratio runners build the reference model and alignment costs for each split automatically. For main-experiment data, use `scripts/Inductive_Miner_Infrequent.py` and `scripts/compute_train_alignment_costs.py`; the trainer reads `case_id` and normalized `alignment_cost`. See the [experiment commands](../README.md#training).
 
 The BPI Challenge logs remain subject to the terms and citation requirements of their original providers. Inclusion here does not relicense those datasets.

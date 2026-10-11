@@ -414,7 +414,6 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--datasets", nargs="+", choices=DATASETS, default=list(DATASETS))
     parser.add_argument("--observed-ratios", nargs="+", type=float, default=list(RATIOS))
     parser.add_argument("--base-seed", type=int, default=42)
-    parser.add_argument("--repeats", type=int, default=1, help="Independent repetitions per dataset (indexed from 1).")
     parser.add_argument("--validation-ratio", type=float, default=0.1)
     parser.add_argument("--validation-seed", type=int, default=2026)
     parser.add_argument("--max-len", type=int, default=None, help="Recovered preprocessing truncation; default: no truncation.")
@@ -430,8 +429,8 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
             parser.error(f"--{name.replace('_', '-')} must not contain duplicates.")
     if any(not 0 < ratio < 1 for ratio in args.observed_ratios):
         parser.error("Observed ratios must be strictly between 0 and 1.")
-    if args.repeats < 1 or not 0 <= args.validation_ratio < 1 or (args.max_len is not None and args.max_len < 1):
-        parser.error("repeats/max-len must be positive; validation-ratio must be in [0, 1).")
+    if not 0 <= args.validation_ratio < 1 or (args.max_len is not None and args.max_len < 1):
+        parser.error("max-len must be positive; validation-ratio must be in [0, 1).")
     if args.overwrite and args.audit_only:
         parser.error("--audit-only cannot be combined with --overwrite.")
     args.input_dir = args.input_dir.expanduser().resolve()
@@ -491,9 +490,8 @@ def main(argv: list[str] | None = None) -> None:
         source = args.input_dir / f"{dataset}.csv"
         if not source.is_file():
             raise FileNotFoundError(source)
-        seeds = [derive_seed(dataset, args.base_seed, repeat) for repeat in range(1, args.repeats + 1)]
-        if len(set(seeds)) != len(seeds):
-            raise ValueError("Derived seed collision; choose another base seed.")
+        # Keep the historical seed input so released data remain reproducible.
+        seeds = [derive_seed(dataset, args.base_seed, 1)]
         for seed in seeds:
             for ratio in args.observed_ratios:
                 destination = args.output_dir / dataset / f"seed_{seed}" / ratio_directory(ratio)
@@ -505,15 +503,14 @@ def main(argv: list[str] | None = None) -> None:
     for dataset in args.datasets:
         print(f"Reading {dataset} (variant and activity column: name)...", flush=True)
         log = load_log(args.input_dir / f"{dataset}.csv")
-        for repeat in range(1, args.repeats + 1):
-            if args.audit_only:
-                audit_existing(log, dataset, derive_seed(dataset, args.base_seed, repeat),
-                               args.observed_ratios, args.output_dir, config)
-            else:
-                generate_seed(log, dataset, args.base_seed, repeat, args.observed_ratios, args.output_dir, config)
-                write_summary(args.output_dir)
+        if args.audit_only:
+            audit_existing(log, dataset, derive_seed(dataset, args.base_seed, 1),
+                           args.observed_ratios, args.output_dir, config)
+        else:
+            generate_seed(log, dataset, args.base_seed, 1, args.observed_ratios, args.output_dir, config)
+            write_summary(args.output_dir)
     if args.audit_only:
-        print(f"Read-only audit complete: {len(args.datasets) * args.repeats * len(args.observed_ratios)} splits; {config}")
+        print(f"Read-only audit complete: {len(args.datasets) * len(args.observed_ratios)} splits; {config}")
         return
     count = write_summary(args.output_dir)
     print(f"Complete: {count} validated splits listed in {args.output_dir / 'summary.csv'}", flush=True)
