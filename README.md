@@ -1,4 +1,4 @@
-# DCAD: Masked Diffusion for Control-Flow Anomaly Detection
+# DCAD: Masked Diffusion for Control-Flow Anomaly Detection on Unseen Process Variants 
 
 Implementation of DCAD, EM-DCAD and TN-DCAD for anomaly detection on unseen process variants.
 
